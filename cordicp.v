@@ -24,7 +24,6 @@ reg [4:0] counter;
 reg [1:0] state;
   parameter E_IDLE  = 2'd0;
   parameter E_CALC  = 2'd1;
-  parameter E_DONE  = 2'd2;
 
 always @ (posedge clk, rst) begin
   if (rst == 1'b1) begin
@@ -52,15 +51,11 @@ always @ (posedge clk, rst) begin
         else
           y <= y + (y >> (counter - 5'd15));
       end
-      if (counter == 5'd31)
-        state <= E_DONE;
+      if (counter == 5'd31) begin
+        state <= E_IDLE;
+        valid <= 1'b1;
+      end
     end
-
-    E_DONE: begin
-      valid <= 1'b1;
-      state <= E_IDLE;
-    end
-
   endcase
 end
 
