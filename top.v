@@ -63,9 +63,9 @@ always @ (posedge clk, rst) begin
   
   /* Lock in e^x, e^-x when valid is high */
   if (validp == 1'b1)
-    epx <= w_epx [47:15];
+    epx <= w_epx[47:16];
   if (validn == 1'b1)
-    enx <= w_enx [47:15];
+    enx <= w_enx[47:16];
 
   sinhx <= w_sinhx;
   coshx <= w_coshx;
@@ -73,8 +73,8 @@ always @ (posedge clk, rst) begin
 
 end
 
-assign w_sinhx = (w_epx [47:15] - w_enx [47:15]) >> 2;
-assign w_coshx = (w_epx [47:15] + w_enx [47:15]) >> 2;
+assign w_sinhx = (w_epx [47:16] - w_enx [47:16]) >> 1;
+assign w_coshx = (w_epx [47:16] + w_enx [47:16]) >> 1;
 assign w_valid = validn & validp;
 
 assign lookupp = { 
