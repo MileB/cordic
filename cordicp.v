@@ -1,3 +1,8 @@
+// cordicp.v
+// Team Seniors
+// Used to calculate e^x
+// All values are fixed-point decimal
+// with point in the exact center
 module cordicp(
   x,
   clk,
@@ -25,6 +30,8 @@ reg [1:0] state;
   parameter E_IDLE  = 2'd0;
   parameter E_CALC  = 2'd1;
 
+// Near copy of cordicn.v, see that file
+// for better comments
 always @ (posedge clk, rst) begin
   if (rst == 1'b1) begin
     x_reg <= {16'h00, x, 16'h00};
@@ -46,10 +53,14 @@ always @ (posedge clk, rst) begin
       counter <= counter+1;
       if (x_reg > tab[counter]) begin
         x_reg <= x_reg - tab[counter];
+
+        //------- Only difference between this file and cordicn ------
         if (counter < 5'd16)
           y <= y << (5'd16 - counter);
         else
           y <= y + (y >> (counter - 5'd15));
+        //------- Only difference between this file and cordicn ------
+        
       end
       if (counter == 5'd31) begin
         state <= E_IDLE;

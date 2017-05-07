@@ -1,3 +1,7 @@
+// top.v
+// Used to calculate e^x, coshx, sinhx
+// From a given x. All values in fixed-point
+// decimal with decimal point in exact center
 module top
 (
   clk,
@@ -32,6 +36,7 @@ wire   [63:0] w_enx;
 wire          w_valid;
 
 
+// Calculates e ^ x
 cordicp epos (
   .x      (x),
   .clk    (clk),
@@ -42,6 +47,7 @@ cordicp epos (
   .valid  (validp)
 );
 
+// Calculates e ^ -x
 cordicn eneg (
   .x      (x),
   .clk    (clk),
@@ -67,16 +73,24 @@ always @ (posedge clk, rst) begin
   if (validn == 1'b1)
     enx <= w_enx[47:16];
 
+  /* Register the combinatorial 
+  *  values every clock period */
   sinhx <= w_sinhx;
   coshx <= w_coshx;
   valid <= w_valid;
 
 end
 
+/* sinhx = (e^x - e^-x) / 2,
+*  coshx = (e^x + e^-x) / 2,
+*  [47:16] range gives us a 32-bit number out of the
+*  64-bit wide output provided by the cordic blocks 
+*  while still keeping the decimal point centered */
 assign w_sinhx = (w_epx [47:16] - w_enx [47:16]) >> 1;
 assign w_coshx = (w_epx [47:16] + w_enx [47:16]) >> 1;
 assign w_valid = validn & validp;
 
+/* Lookup table used for e^x cordic block */
 assign lookupp = { 
   64'h0000_000B_1721_7F7D,    
   64'h0000_000A_65AF_6785,    
@@ -112,6 +126,7 @@ assign lookupp = {
   64'h0000_0000_0000_FFFF
   };
 
+/* Lookup table used for e^-x cordic block */
 assign lookupn = {
     64'h0000_000B_1721_7F7D,      
     64'h0000_000A_65AF_6785,      
