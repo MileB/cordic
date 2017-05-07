@@ -32,7 +32,7 @@ wire   [63:0] w_enx;
 wire          w_valid;
 
 
-cordicp uut1 (
+cordicp epos (
   .x      (x),
   .clk    (clk),
   .rst    (rst),
@@ -42,7 +42,7 @@ cordicp uut1 (
   .valid  (validp)
 );
 
-cordicn uut2 (
+cordicn eneg (
   .x      (x),
   .clk    (clk),
   .rst    (rst),
@@ -148,4 +148,4 @@ assign lookupn = {
     };
 
 
-    endmodule
+endmodule

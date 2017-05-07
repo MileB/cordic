@@ -1,4 +1,4 @@
-module top_tb;
+module top_ieee_tb;
 
 reg         clk;
 reg         rst;
@@ -10,16 +10,16 @@ wire [31:0] sinhx;
 wire [31:0] coshx;
 wire        valid;
 
-top uut
+top_ieee uut
 (
-  .clk    (clk),
-  .rst    (rst),
-  .x      (x),
-  .en     (en),
-  .epx    (epx),
-  .sinhx  (sinhx),
-  .coshx  (coshx),
-  .valid  (valid)
+  .clk         (clk),
+  .rst         (rst),
+  .ieee_x      (x),
+  .en          (en),
+  .ieee_epx    (epx),
+  .ieee_sinhx  (sinhx),
+  .ieee_coshx  (coshx),
+  .valid       (valid)
 );
 
 always begin
@@ -39,9 +39,9 @@ initial begin
   
   rst =  1'b0;
   en  =  1'b1;
-  x   = 32'h00000400;
+  x   = 32'h40800000; // 4 in IEEE-754 format 
   
-  #10;
+  #40;
 
   en = 1'b0;
 end
